@@ -14,7 +14,9 @@ class UsuarioController extends Controller
                 'senha' => $request->senha,
                 'nivelAcesso' => $request->nivelAcesso,
             ]);
-            return response()->json("Criado com sucesso!", 200);
+            $user = pj_usuario::firstWhere('email', $request->email);
+
+            return response()->json($user, 201);
         }catch(Exception $e){
             return response()->json($e->getMessage(), 400);
         }
@@ -36,6 +38,19 @@ class UsuarioController extends Controller
             return response()->json("Atualizado com sucesso!", 200);
         }catch(Exception $e){
             return response()->json($e->getMessage(), 400);
+        }
+    }
+
+    public function login(Request $request) {
+        $user = pj_usuario::firstWhere('email', $request->email);
+        if (!$user) {
+            return response()->json('Usuário não identificado', 404);
+        }
+
+        if ($user->senha == $request->senha) {
+            return response()->json($user, 200);
+        } else {
+            return response()->json('Dados inválidos', 400);
         }
     }
 }

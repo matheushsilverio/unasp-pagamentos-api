@@ -33,6 +33,7 @@ Route::get('/', function () {
 Route::post('/usuario/novo', [UsuarioController::class, 'store']);
 Route::get('/usuario/listar', [UsuarioController::class, 'exibir']);
 Route::post('/usuario/editar', [UsuarioController::class, 'update']);
+Route::post('/usuario/login', [UsuarioController::class, 'login']);
 
 // Instituição
 Route::post('/instituicao/novo', [InstituicaoController::class, 'store']);
@@ -48,6 +49,8 @@ Route::post('/curso/editar', [CursoController::class, 'update']); //->name('alte
 Route::post('/pessoa/novo', [PessoasController::class, 'store']);
 Route::get('/pessoa/listar', [PessoasController::class, 'exibir']);
 Route::post('/pessoa/editar', [PessoasController::class, 'update']);
+Route::get('/pessoa/{id}', [PessoasController::class, 'getById']);
+Route::get('/pessoa/usuario/{id}', [PessoasController::class, 'getByUserId']);
 
 // Aluno
 Route::post('/aluno/novo', [AlunoController::class, 'store']);
@@ -67,11 +70,13 @@ Route::post('/aluno/desconto/editar', [AlunoDescontoController::class, 'update']
 // Fatura
 Route::post('/fatura/novo', [FaturaController::class, 'store']);
 Route::get('/fatura/listar', [FaturaController::class, 'exibir']);
+Route::get('/fatura/aluno/{id}', [FaturaController::class, 'getAluno']);
 Route::post('/fatura/editar', [FaturaController::class, 'update']);
 
 // Dividas
 Route::post('/dividas/novo', [DividasController::class, 'store']);
 Route::get('/dividas/listar', [DividasController::class, 'exibir']);
+Route::get('/dividas/fatura/{id}', [DividasController::class, 'getByFatura']);
 Route::post('/dividas/editar', [DividasController::class, 'update']);
 
 // Status

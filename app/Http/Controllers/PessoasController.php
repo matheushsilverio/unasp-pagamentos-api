@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\pj_pessoa;
+use App\pj_aluno;
 
 class PessoasController extends Controller
 {
@@ -20,7 +21,8 @@ class PessoasController extends Controller
                 'cidade' => $request->cidade,
                 'uf' => $request->uf,
             ]);
-            return response()->json("Criado com sucesso!", 200);
+            $pessoa = pj_pessoa::firstWhere('cpf', $request->cpf);
+            return response()->json($pessoa, 201);
         }catch(Exception $e){
             return response()->json($e->getMessage(), 400);
         }
@@ -49,5 +51,26 @@ class PessoasController extends Controller
         }catch(Exception $e){
             return response()->json($e->getMessage(), 400);
         }
+    }
+
+    public function getById(Request $request, $id) {
+        $pessoa = pj_pessoa::findOrFail($id);
+
+        if (!$pessoa) return response()->json('Pessoa não encontrada', 404);
+
+        return response()->json($pessoa, 200);
+    }
+
+    public function getByUserId(Request $request, $idUsuario) {
+        $pessoa = pj_pessoa::firstWhere('idUsuario', $idUsuario);
+
+        if (!$pessoa) return response()->json('Pessoa não encontrada', 404);
+
+        $aluno = pj_aluno::firstWhere('idPessoa', $pessoa->id);
+        if (!$aluno) $aluno = null;
+
+        $pessoa->aluno = $aluno;
+
+        return response()->json($pessoa, 200);
     }
 }
